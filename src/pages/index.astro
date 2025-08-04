@@ -1,0 +1,372 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { fetchPinnedRepos } from '../../lib/github.ts';
+import skills from '../data/skills.json';
+
+let pinnedRepos = [];
+try {
+  pinnedRepos = await fetchPinnedRepos();
+} catch (error) {
+  console.error('Failed to fetch GitHub repos:', error);
+}
+---
+
+<Layout title="Avraham Rahimov - Data Scientist">
+  <!-- Hero Section -->
+  <section class="min-h-screen flex items-center justify-center relative overflow-hidden">
+    <div class="container mx-auto px-6 text-center relative z-10">
+      <div class="mb-8">
+        <h1 class="text-6xl md:text-8xl font-bold mb-6 relative">
+          <span class="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent glow-text">
+            Avraham
+          </span>
+          <br />
+          <span class="text-4xl md:text-6xl text-light">Rahimov</span>
+        </h1>
+        <div class="code-font text-xl md:text-2xl text-accent mb-8 relative">
+          <span id="typing-animation"></span>
+          <span class="animate-pulse">|</span>
+        </div>
+      </div>
+      
+      <p class="text-xl md:text-2xl text-light/80 max-w-3xl mx-auto mb-12 leading-relaxed">
+        I'm a passionate and creative <span class="text-primary font-semibold">Data Scientist</span> 
+        with expertise in <span class="text-accent">machine learning</span>, 
+        <span class="text-accent">deep learning</span>, and <span class="text-accent">AI</span>. 
+        I love building practical projects that explore the endless possibilities of artificial intelligence.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+        <a href="#projects" 
+           class="bg-gradient-to-r from-primary to-accent text-dark px-8 py-4 rounded-full font-semibold text-lg hover-glow transition-all duration-300 transform hover:scale-105">
+          View My Work
+        </a>
+        <a href="/contact" 
+           class="border-2 border-primary text-primary px-8 py-4 rounded-full font-semibold text-lg hover:bg-primary hover:text-dark transition-all duration-300 transform hover:scale-105">
+          Get In Touch
+        </a>
+      </div>
+    </div>
+    
+    <!-- Floating elements -->
+    <div class="absolute top-20 left-10 w-20 h-20 border-2 border-accent rounded-full opacity-20 animate-bounce"></div>
+    <div class="absolute bottom-20 right-10 w-16 h-16 border-2 border-primary rotate-45 opacity-20 animate-pulse"></div>
+    <div class="absolute top-1/2 left-5 w-12 h-12 bg-gradient-to-r from-primary to-accent rounded-full opacity-30 animate-ping"></div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="py-20 relative">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-bold text-primary glow-text mb-4">About Me</h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto"></div>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div class="space-y-6">
+          <div class="bg-dark/50 backdrop-blur-lg border border-primary/20 rounded-2xl p-8 hover-glow">
+            <h3 class="text-2xl font-semibold text-accent mb-4">🎓 Education</h3>
+            <div class="space-y-4">
+              <div>
+                <h4 class="text-lg font-semibold text-light">M.Sc. Computer Science (with Thesis)</h4>
+                <p class="text-light/70">Ariel University</p>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold text-light">B.Sc. Computer Science</h4>
+                <p class="text-light/70">Ariel University</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-dark/50 backdrop-blur-lg border border-primary/20 rounded-2xl p-8 hover-glow">
+            <h3 class="text-2xl font-semibold text-accent mb-4">📍 Location</h3>
+            <p class="text-light">Ramla, Israel</p>
+          </div>
+        </div>
+        
+        <div class="space-y-6">
+          <div class="bg-dark/50 backdrop-blur-lg border border-primary/20 rounded-2xl p-8 hover-glow">
+            <h3 class="text-2xl font-semibold text-accent mb-4">💡 What I Do</h3>
+            <p class="text-light/80 leading-relaxed">
+              I specialize in machine learning, deep learning, NLP, and computer vision. 
+              I've worked as a research assistant, teaching assistant, and mentor, 
+              thriving in both academic and hands-on environments. I'm always seeking 
+              exciting challenges and opportunities to grow.
+            </p>
+          </div>
+          
+          <div class="bg-dark/50 backdrop-blur-lg border border-primary/20 rounded-2xl p-8 hover-glow">
+            <h3 class="text-2xl font-semibold text-accent mb-4">🚀 Passion</h3>
+            <p class="text-light/80 leading-relaxed">
+              I love building practical projects that explore AI capabilities and 
+              push the boundaries of what's possible with technology.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section id="skills" class="py-20 bg-dark/30">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-bold text-primary glow-text mb-4">Skills & Technologies</h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto mb-6"></div>
+        <p class="text-light/70 text-lg">Technologies I work with</p>
+      </div>
+      
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        {skills.map((skill, index) => (
+          <div class="bg-dark/50 backdrop-blur-lg border border-primary/20 rounded-xl p-6 text-center hover-glow group transition-all duration-300 transform hover:scale-105"
+               style={`animation-delay: ${index * 100}ms`}>
+            <div class="text-2xl mb-3">
+              {skill.includes('Python') && '🐍'}
+              {skill.includes('Java') && '☕'}
+              {skill.includes('C/C++') && '⚡'}
+              {skill.includes('Machine Learning') && '🤖'}
+              {skill.includes('Deep Learning') && '🧠'}
+              {skill.includes('NLP') && '📝'}
+              {skill.includes('Computer Vision') && '👁️'}
+              {skill.includes('Pandas') && '🐼'}
+              {skill.includes('NumPy') && '🔢'}
+              {skill.includes('Scikit-learn') && '📊'}
+            </div>
+            <h3 class="text-light font-semibold group-hover:text-primary transition-colors">
+              {skill}
+            </h3>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects" class="py-20">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-bold text-primary glow-text mb-4">Featured Projects</h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto mb-6"></div>
+        <p class="text-light/70 text-lg">Some of my recent work</p>
+      </div>
+      
+      {pinnedRepos.length > 0 ? (
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {pinnedRepos.map((repo) => (
+            <div class="bg-dark/50 backdrop-blur-lg border border-primary/20 rounded-2xl p-8 hover-glow group transition-all duration-300 transform hover:scale-105">
+              <div class="flex items-start justify-between mb-4">
+                <h3 class="text-xl font-bold text-light group-hover:text-primary transition-colors">
+                  {repo.name}
+                </h3>
+                <svg class="w-6 h-6 text-accent" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                </svg>
+              </div>
+              
+              <p class="text-light/70 mb-6 leading-relaxed">
+                {repo.description || 'No description available'}
+              </p>
+              
+              {repo.languages?.nodes && repo.languages.nodes.length > 0 && (
+                <div class="flex flex-wrap gap-2 mb-6">
+                  {repo.languages.nodes.map((lang) => (
+                    <span class="px-3 py-1 bg-accent/20 text-accent rounded-full text-sm code-font">
+                      {lang.name}
+                    </span>
+                  ))}
+                </div>
+              )}
+              
+              <div class="flex gap-4">
+                <a href={repo.url} 
+                   class="flex-1 bg-primary/20 text-primary text-center py-2 rounded-lg hover:bg-primary hover:text-dark transition-all duration-300 font-semibold">
+                  View Code
+                </a>
+                {repo.homepageUrl && (
+                  <a href={repo.homepageUrl} 
+                     class="flex-1 bg-accent/20 text-accent text-center py-2 rounded-lg hover:bg-accent hover:text-dark transition-all duration-300 font-semibold">
+                    Live Demo
+                  </a>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-12">
+          <div class="text-6xl mb-4">🚧</div>
+          <p class="text-light/70 text-lg">Projects loading... Check back soon!</p>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- Experience Section -->
+  <section id="experience" class="py-20 bg-dark/30">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-bold text-primary glow-text mb-4">Experience</h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto mb-6"></div>
+        <p class="text-light/70 text-lg">My professional journey</p>
+      </div>
+      
+      <div class="max-w-4xl mx-auto">
+        <div class="relative">
+          <!-- Timeline line -->
+          <div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary to-accent"></div>
+          
+          <!-- Experience items -->
+          <div class="space-y-12">
+            <div class="relative flex items-start">
+              <div class="absolute left-6 w-4 h-4 bg-primary rounded-full border-4 border-dark"></div>
+              <div class="ml-20 bg-dark/50 backdrop-blur-lg border border-primary/20 rounded-2xl p-8 hover-glow">
+                <h3 class="text-xl font-bold text-accent mb-2">Research Assistant</h3>
+                <p class="text-light mb-4">Ariel University</p>
+                <p class="text-light/70">
+                  Conducted research in machine learning and AI, contributing to academic publications 
+                  and exploring cutting-edge technologies in data science.
+                </p>
+              </div>
+            </div>
+            
+            <div class="relative flex items-start">
+              <div class="absolute left-6 w-4 h-4 bg-accent rounded-full border-4 border-dark"></div>
+              <div class="ml-20 bg-dark/50 backdrop-blur-lg border border-primary/20 rounded-2xl p-8 hover-glow">
+                <h3 class="text-xl font-bold text-accent mb-2">Teaching Assistant</h3>
+                <p class="text-light mb-4">Ariel University</p>
+                <p class="text-light/70">
+                  Mentored students in computer science courses, helping them understand 
+                  complex concepts in programming and data structures.
+                </p>
+              </div>
+            </div>
+            
+            <div class="relative flex items-start">
+              <div class="absolute left-6 w-4 h-4 bg-primary rounded-full border-4 border-dark"></div>
+              <div class="ml-20 bg-dark/50 backdrop-blur-lg border border-primary/20 rounded-2xl p-8 hover-glow">
+                <h3 class="text-xl font-bold text-accent mb-2">Student Mentor</h3>
+                <p class="text-light mb-4">Academic Environment</p>
+                <p class="text-light/70">
+                  Provided guidance and support to fellow students, fostering a collaborative 
+                  learning environment and sharing knowledge in AI and machine learning.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20">
+    <div class="container mx-auto px-6 text-center">
+      <div class="bg-gradient-to-r from-primary/10 to-accent/10 backdrop-blur-lg border border-primary/20 rounded-3xl p-12 hover-glow">
+        <h2 class="text-3xl md:text-4xl font-bold text-light mb-6">
+          Let's Build Something Amazing Together
+        </h2>
+        <p class="text-light/70 text-lg mb-8 max-w-2xl mx-auto">
+          I'm always excited to work on new projects and explore innovative solutions. 
+          Whether it's machine learning, data analysis, or AI applications, let's create something extraordinary.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-6 justify-center">
+          <a href="/contact" 
+             class="bg-gradient-to-r from-primary to-accent text-dark px-8 py-4 rounded-full font-semibold text-lg hover-glow transition-all duration-300 transform hover:scale-105">
+            Start a Conversation
+          </a>
+          <a href="/resume" 
+             class="border-2 border-primary text-primary px-8 py-4 rounded-full font-semibold text-lg hover:bg-primary hover:text-dark transition-all duration-300 transform hover:scale-105">
+            View My Resume
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  // Typing animation
+  const phrases = [
+    'Data Scientist',
+    'ML Engineer', 
+    'AI Researcher',
+    'Problem Solver',
+    'Code Artist'
+  ];
+  
+  let currentPhrase = 0;
+  let currentChar = 0;
+  let isDeleting = false;
+  
+  const typingElement = document.getElementById('typing-animation');
+  
+  function typeText() {
+    const phrase = phrases[currentPhrase];
+    
+    if (isDeleting) {
+      typingElement.textContent = phrase.substring(0, currentChar - 1);
+      currentChar--;
+    } else {
+      typingElement.textContent = phrase.substring(0, currentChar + 1);
+      currentChar++;
+    }
+    
+    let typeSpeed = isDeleting ? 50 : 100;
+    
+    if (!isDeleting && currentChar === phrase.length) {
+      typeSpeed = 2000;
+      isDeleting = true;
+    } else if (isDeleting && currentChar === 0) {
+      isDeleting = false;
+      currentPhrase = (currentPhrase + 1) % phrases.length;
+      typeSpeed = 500;
+    }
+    
+    setTimeout(typeText, typeSpeed);
+  }
+  
+  // Start typing animation
+  typeText();
+  
+  // Scroll animations
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, observerOptions);
+  
+  // Observe all sections
+  document.querySelectorAll('section').forEach(section => {
+    section.style.opacity = '0';
+    section.style.transform = 'translateY(50px)';
+    section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(section);
+  });
+</script>
+
+<style>
+  /* Custom animations */
+  @keyframes slideInFromBottom {
+    from {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-slide-in {
+    animation: slideInFromBottom 0.6s ease forwards;
+  }
+</style>
+</Layout>
