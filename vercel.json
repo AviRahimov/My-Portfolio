@@ -1,4 +1,4 @@
 {
-  "framework": "astro",
+  "buildCommand": "bash build.sh",
   "outputDirectory": "dist"
 }
