@@ -2,9 +2,9 @@
   "name": "avraham-portfolio",
   "version": "1.0.0",
   "scripts": {
-    "dev": "npx astro dev",
-    "build": "npx astro build",
-    "preview": "npx astro preview"
+    "dev": "node_modules/.bin/astro dev",
+    "build": "node build.js",
+    "preview": "node_modules/.bin/astro preview"
   },
   "dependencies": {
     "astro": "^4.16.0",
