@@ -74,9 +74,7 @@ Edit the HTML in those files to update roles, organizations, or descriptions.
 
 ### Resume PDF
 
-Replace `dist/Avi Resume - CV.pdf` with your updated PDF. Keep the same filename, or update the `href` in [src/pages/resume.astro](src/pages/resume.astro) (line referencing `/Avi Resume - CV.pdf`).
-
-The `dist/` directory is committed to the repo so the PDF is available as a static asset on Vercel.
+Replace `public/Avi Resume - CV.pdf` with your updated PDF. Keep the same filename, or update the `href` in [src/pages/resume.astro](src/pages/resume.astro) (line referencing `/Avi Resume - CV.pdf`).
 
 ---
 

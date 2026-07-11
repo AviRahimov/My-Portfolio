@@ -75,6 +75,22 @@ const { title, description = "Avraham Rahimov - Data Scientist Portfolio" } = As
         transition: all 0.3s ease;
       }
       
+      /* Avatar */
+      @keyframes avatarFloat {
+        0%, 100% { transform: translateY(0px); }
+        50%       { transform: translateY(-8px); }
+      }
+      .avatar-float { animation: avatarFloat 3s ease-in-out infinite; }
+
+      #avatar-bubble {
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+      #avatar-bubble.bubble-hidden {
+        opacity: 0;
+        transform: translateY(6px) scale(0.95);
+        pointer-events: none;
+      }
+
       /* Custom scrollbar */
       ::-webkit-scrollbar {
         width: 8px;
@@ -168,6 +184,18 @@ const { title, description = "Avraham Rahimov - Data Scientist Portfolio" } = As
       </div>
     </footer>
 
+    <!-- Floating Avatar -->
+    <div id="avatar-container" class="fixed bottom-6 left-6 z-40 flex flex-col items-start select-none avatar-float">
+      <div id="avatar-bubble" class="relative mb-3 max-w-[230px] bg-dark/90 border border-primary/30 rounded-2xl px-4 py-3 shadow-xl backdrop-blur-md">
+        <p id="avatar-message" class="text-sm text-light leading-relaxed"></p>
+        <div class="absolute -bottom-[9px] left-6 w-4 h-4 bg-dark/90 border-r border-b border-primary/30 rotate-45"></div>
+      </div>
+      <button id="avatar-btn" aria-label="Toggle avatar message"
+        class="w-16 h-16 rounded-full border-2 border-primary shadow-lg overflow-hidden transition-all duration-300 hover:scale-110 hover:shadow-[0_0_20px_rgba(0,255,255,0.5)]">
+        <img src="/my_avatar.png" alt="Avi" class="w-full h-full object-cover" draggable="false" />
+      </button>
+    </div>
+
     <!-- Back to top button -->
     <button
       id="back-to-top"
@@ -244,6 +272,67 @@ const { title, description = "Avraham Rahimov - Data Scientist Portfolio" } = As
       backToTop?.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
+
+      // Floating avatar speech bubbles
+      const avatarMessages = {
+        default:    "Hi! I'm Avi 👋 Welcome to my portfolio!",
+        about:      "I'm a Data Scientist based in Ramla, Israel 🌍",
+        skills:     "I work with Python, ML, Deep Learning & more! 🧠",
+        projects:   "Here are some of my GitHub projects! ⭐",
+        experience: "Researcher, Teaching Assistant & Mentor at Ariel University 🎓",
+        contact:    "Feel free to send me a message! I reply within 24h 📩",
+        resume:     "You can download my full CV using the button above ⬆️",
+      };
+
+      const avatarBubble  = document.getElementById('avatar-bubble');
+      const avatarMsg     = document.getElementById('avatar-message');
+      const avatarBtn     = document.getElementById('avatar-btn');
+      let bubbleVisible   = true;
+
+      function setAvatarMessage(text) {
+        if (!avatarMsg) return;
+        avatarMsg.style.opacity = '0';
+        setTimeout(() => {
+          avatarMsg.textContent = text;
+          avatarMsg.style.opacity = '1';
+        }, 200);
+      }
+
+      if (avatarMsg) avatarMsg.style.transition = 'opacity 0.2s ease';
+
+      const avatarPath = window.location.pathname;
+      if (avatarPath.startsWith('/resume')) {
+        setAvatarMessage(avatarMessages.resume);
+      } else if (avatarPath.startsWith('/contact')) {
+        setAvatarMessage(avatarMessages.contact);
+      } else {
+        setAvatarMessage(avatarMessages.default);
+      }
+
+      avatarBtn?.addEventListener('click', () => {
+        bubbleVisible = !bubbleVisible;
+        avatarBubble?.classList.toggle('bubble-hidden', !bubbleVisible);
+      });
+
+      if (avatarPath === '/' || avatarPath === '') {
+        const sectionMsgs = {
+          about:      avatarMessages.about,
+          skills:     avatarMessages.skills,
+          projects:   avatarMessages.projects,
+          experience: avatarMessages.experience,
+        };
+        const sectionObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting && bubbleVisible) {
+              const msg = sectionMsgs[entry.target.id];
+              if (msg) setAvatarMessage(msg);
+            }
+          });
+        }, { threshold: 0.4 });
+        document.querySelectorAll('#about, #skills, #projects, #experience').forEach(el => {
+          sectionObserver.observe(el);
+        });
+      }
     </script>
   </body>
 </html>
