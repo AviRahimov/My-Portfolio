@@ -1,7 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { fetchPinnedRepos } from '../../lib/github.ts';
-import skills from '../data/skills.json';
+import skillsData from '../data/skills.json';
+
+const skillCategories = Object.entries(skillsData) as [string, string[]][];
+const allSkills = skillCategories.flatMap(([cat, items]) => items.map(name => ({ name, category: cat })));
 
 let pinnedRepos = [];
 try {
@@ -48,6 +51,13 @@ try {
       </div>
     </div>
     
+    <!-- Scroll down hint -->
+    <a href="#about" class="absolute bottom-8 left-1/2 -translate-x-1/2 text-primary opacity-60 hover:opacity-100 transition-opacity duration-300 animate-bounce" aria-label="Scroll down">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+      </svg>
+    </a>
+
     <!-- Floating elements -->
     <div class="absolute top-20 left-10 w-20 h-20 border-2 border-accent rounded-full opacity-20 animate-bounce"></div>
     <div class="absolute bottom-20 right-10 w-16 h-16 border-2 border-primary rotate-45 opacity-20 animate-pulse"></div>
@@ -110,31 +120,49 @@ try {
   <!-- Skills Section -->
   <section id="skills" class="py-20 bg-dark/30">
     <div class="container mx-auto px-6">
-      <div class="text-center mb-16">
+      <div class="text-center mb-12">
         <h2 class="text-4xl md:text-5xl font-bold text-primary glow-text mb-4">Skills & Technologies</h2>
         <div class="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto mb-6"></div>
         <p class="text-light/70 text-lg">Technologies I work with</p>
       </div>
-      
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-        {skills.map((skill, index) => (
-          <div class="bg-dark/50 backdrop-blur-lg border border-primary/20 rounded-xl p-6 text-center hover-glow group transition-all duration-300 transform hover:scale-105"
-               style={`animation-delay: ${index * 100}ms`}>
+
+      <!-- Filter tabs -->
+      <div class="flex flex-wrap justify-center gap-3 mb-10" id="skill-filters">
+        <button
+          class="skill-filter-btn active px-5 py-2 rounded-full border border-primary/40 text-sm font-semibold transition-all duration-200 bg-primary text-dark"
+          data-filter="all"
+        >All</button>
+        {skillCategories.map(([cat]) => (
+          <button
+            class="skill-filter-btn px-5 py-2 rounded-full border border-primary/40 text-light text-sm font-semibold hover:bg-primary/20 transition-all duration-200"
+            data-filter={cat}
+          >{cat}</button>
+        ))}
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6" id="skills-grid">
+        {allSkills.map((skill, index) => (
+          <div
+            class="skill-card bg-dark/50 backdrop-blur-lg border border-primary/20 rounded-xl p-6 text-center hover-glow group transition-all duration-300 transform hover:scale-105"
+            data-category={skill.category}
+            style={`animation-delay: ${index * 80}ms`}
+          >
             <div class="text-2xl mb-3">
-              {skill.includes('Python') && '🐍'}
-              {skill.includes('Java') && '☕'}
-              {skill.includes('C/C++') && '⚡'}
-              {skill.includes('Machine Learning') && '🤖'}
-              {skill.includes('Deep Learning') && '🧠'}
-              {skill.includes('NLP') && '📝'}
-              {skill.includes('Computer Vision') && '👁️'}
-              {skill.includes('Pandas') && '🐼'}
-              {skill.includes('NumPy') && '🔢'}
-              {skill.includes('Scikit-learn') && '📊'}
+              {skill.name.includes('Python') && '🐍'}
+              {skill.name.includes('Java') && '☕'}
+              {skill.name.includes('C/C++') && '⚡'}
+              {skill.name.includes('Machine Learning') && '🤖'}
+              {skill.name.includes('Deep Learning') && '🧠'}
+              {skill.name.includes('NLP') && '📝'}
+              {skill.name.includes('Computer Vision') && '👁️'}
+              {skill.name.includes('Pandas') && '🐼'}
+              {skill.name.includes('NumPy') && '🔢'}
+              {skill.name.includes('Scikit-learn') && '📊'}
             </div>
-            <h3 class="text-light font-semibold group-hover:text-primary transition-colors">
-              {skill}
+            <h3 class="text-light font-semibold group-hover:text-primary transition-colors text-sm">
+              {skill.name}
             </h3>
+            <span class="mt-1 text-xs text-light/40">{skill.category}</span>
           </div>
         ))}
       </div>
@@ -218,38 +246,71 @@ try {
           <!-- Experience items -->
           <div class="space-y-12">
             <div class="relative flex items-start">
-              <div class="absolute left-6 w-4 h-4 bg-primary rounded-full border-4 border-dark"></div>
-              <div class="ml-20 bg-dark/50 backdrop-blur-lg border border-primary/20 rounded-2xl p-8 hover-glow">
-                <h3 class="text-xl font-bold text-accent mb-2">Research Assistant</h3>
-                <p class="text-light mb-4">Ariel University</p>
-                <p class="text-light/70">
-                  Conducted research in machine learning and AI, contributing to academic publications 
-                  and exploring cutting-edge technologies in data science.
-                </p>
+              <div class="absolute left-6 w-4 h-4 bg-primary rounded-full border-4 border-dark mt-4"></div>
+              <div class="ml-20 bg-dark/50 backdrop-blur-lg border border-primary/20 rounded-2xl p-8 hover-glow w-full">
+                <div class="flex items-start justify-between cursor-pointer timeline-toggle" data-target="idx-exp-1">
+                  <div>
+                    <h3 class="text-xl font-bold text-accent mb-1">Research Assistant</h3>
+                    <p class="text-light">Ariel University</p>
+                  </div>
+                  <button class="text-primary hover:text-accent transition-colors mt-1 flex-shrink-0 ml-4" aria-label="Toggle details">
+                    <svg class="w-6 h-6 timeline-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                  </button>
+                </div>
+                <div id="idx-exp-1" class="timeline-detail overflow-hidden" style="max-height: 0; transition: max-height 0.35s ease;">
+                  <p class="text-light/70 mt-3">
+                    Conducted research in machine learning and AI, contributing to academic publications
+                    and exploring cutting-edge technologies in data science.
+                  </p>
+                </div>
               </div>
             </div>
-            
+
             <div class="relative flex items-start">
-              <div class="absolute left-6 w-4 h-4 bg-accent rounded-full border-4 border-dark"></div>
-              <div class="ml-20 bg-dark/50 backdrop-blur-lg border border-primary/20 rounded-2xl p-8 hover-glow">
-                <h3 class="text-xl font-bold text-accent mb-2">Teaching Assistant</h3>
-                <p class="text-light mb-4">Ariel University</p>
-                <p class="text-light/70">
-                  Mentored students in computer science courses, helping them understand 
-                  complex concepts in programming and data structures.
-                </p>
+              <div class="absolute left-6 w-4 h-4 bg-accent rounded-full border-4 border-dark mt-4"></div>
+              <div class="ml-20 bg-dark/50 backdrop-blur-lg border border-primary/20 rounded-2xl p-8 hover-glow w-full">
+                <div class="flex items-start justify-between cursor-pointer timeline-toggle" data-target="idx-exp-2">
+                  <div>
+                    <h3 class="text-xl font-bold text-accent mb-1">Teaching Assistant</h3>
+                    <p class="text-light">Ariel University</p>
+                  </div>
+                  <button class="text-primary hover:text-accent transition-colors mt-1 flex-shrink-0 ml-4" aria-label="Toggle details">
+                    <svg class="w-6 h-6 timeline-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                  </button>
+                </div>
+                <div id="idx-exp-2" class="timeline-detail overflow-hidden" style="max-height: 0; transition: max-height 0.35s ease;">
+                  <p class="text-light/70 mt-3">
+                    Mentored students in computer science courses, helping them understand
+                    complex concepts in programming and data structures.
+                  </p>
+                </div>
               </div>
             </div>
-            
+
             <div class="relative flex items-start">
-              <div class="absolute left-6 w-4 h-4 bg-primary rounded-full border-4 border-dark"></div>
-              <div class="ml-20 bg-dark/50 backdrop-blur-lg border border-primary/20 rounded-2xl p-8 hover-glow">
-                <h3 class="text-xl font-bold text-accent mb-2">Student Mentor</h3>
-                <p class="text-light mb-4">Academic Environment</p>
-                <p class="text-light/70">
-                  Provided guidance and support to fellow students, fostering a collaborative 
-                  learning environment and sharing knowledge in AI and machine learning.
-                </p>
+              <div class="absolute left-6 w-4 h-4 bg-primary rounded-full border-4 border-dark mt-4"></div>
+              <div class="ml-20 bg-dark/50 backdrop-blur-lg border border-primary/20 rounded-2xl p-8 hover-glow w-full">
+                <div class="flex items-start justify-between cursor-pointer timeline-toggle" data-target="idx-exp-3">
+                  <div>
+                    <h3 class="text-xl font-bold text-accent mb-1">Student Mentor</h3>
+                    <p class="text-light">Academic Environment</p>
+                  </div>
+                  <button class="text-primary hover:text-accent transition-colors mt-1 flex-shrink-0 ml-4" aria-label="Toggle details">
+                    <svg class="w-6 h-6 timeline-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                  </button>
+                </div>
+                <div id="idx-exp-3" class="timeline-detail overflow-hidden" style="max-height: 0; transition: max-height 0.35s ease;">
+                  <p class="text-light/70 mt-3">
+                    Provided guidance and support to fellow students, fostering a collaborative
+                    learning environment and sharing knowledge in AI and machine learning.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -327,13 +388,55 @@ try {
   
   // Start typing animation
   typeText();
-  
+
+  // Skill filter tabs
+  const filterBtns = document.querySelectorAll('.skill-filter-btn');
+  const skillCards = document.querySelectorAll('.skill-card');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => {
+        b.classList.remove('active', 'bg-primary', 'text-dark');
+        b.classList.add('text-light');
+      });
+      btn.classList.add('active', 'bg-primary', 'text-dark');
+      btn.classList.remove('text-light');
+
+      const filter = btn.getAttribute('data-filter');
+      skillCards.forEach(card => {
+        if (filter === 'all' || card.getAttribute('data-category') === filter) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    });
+  });
+
+  // Expandable timeline items
+  document.querySelectorAll('.timeline-toggle').forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      const targetId = toggle.getAttribute('data-target');
+      const detail = document.getElementById(targetId);
+      const iconPath = toggle.querySelector('.timeline-icon path');
+      const isOpen = detail.style.maxHeight !== '0px' && detail.style.maxHeight !== '';
+
+      if (isOpen) {
+        detail.style.maxHeight = '0px';
+        iconPath?.setAttribute('d', 'M12 4v16m8-8H4');
+      } else {
+        detail.style.maxHeight = detail.scrollHeight + 'px';
+        iconPath?.setAttribute('d', 'M20 12H4');
+      }
+    });
+  });
+
   // Scroll animations
   const observerOptions = {
     threshold: 0.1,
     rootMargin: '0px 0px -50px 0px'
   };
-  
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -342,7 +445,7 @@ try {
       }
     });
   }, observerOptions);
-  
+
   // Observe all sections
   document.querySelectorAll('section').forEach(section => {
     section.style.opacity = '0';

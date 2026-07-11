@@ -1,6 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import skills from '../data/skills.json';
+import skillsData from '../data/skills.json';
+
+const allSkills = Object.values(skillsData).flat();
+const skillsByCategory = Object.entries(skillsData) as [string, string[]][];
 ---
 
 <Layout title="Resume - Avraham Rahimov" description="Data Scientist Resume - Avraham Rahimov">
@@ -80,22 +83,44 @@ import skills from '../data/skills.json';
         <div class="space-y-8">
           <div class="border-l-4 border-primary pl-8 relative">
             <div class="absolute -left-2 top-2 w-4 h-4 bg-primary rounded-full"></div>
-            <h3 class="text-xl font-bold text-light mb-2">Master of Science in Computer Science (with Thesis)</h3>
-            <p class="text-accent font-semibold mb-2">Ariel University</p>
-            <p class="text-light/70">
-              Advanced research in machine learning and artificial intelligence, 
-              with focus on practical applications and theoretical foundations.
-            </p>
+            <div class="flex items-start justify-between cursor-pointer timeline-toggle" data-target="edu-1">
+              <div>
+                <h3 class="text-xl font-bold text-light mb-1">M.Sc. Computer Science (with Thesis)</h3>
+                <p class="text-accent font-semibold">Ariel University</p>
+              </div>
+              <button class="text-primary hover:text-accent transition-colors mt-1 flex-shrink-0 ml-4" aria-label="Toggle details">
+                <svg class="w-6 h-6 timeline-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+              </button>
+            </div>
+            <div id="edu-1" class="timeline-detail overflow-hidden" style="max-height: 0; transition: max-height 0.35s ease;">
+              <p class="text-light/70 mt-3">
+                Advanced research in machine learning and artificial intelligence,
+                with focus on practical applications and theoretical foundations.
+              </p>
+            </div>
           </div>
-          
+
           <div class="border-l-4 border-accent pl-8 relative">
             <div class="absolute -left-2 top-2 w-4 h-4 bg-accent rounded-full"></div>
-            <h3 class="text-xl font-bold text-light mb-2">Bachelor of Science in Computer Science</h3>
-            <p class="text-accent font-semibold mb-2">Ariel University</p>
-            <p class="text-light/70">
-              Comprehensive foundation in computer science principles, algorithms, 
-              data structures, and software engineering practices.
-            </p>
+            <div class="flex items-start justify-between cursor-pointer timeline-toggle" data-target="edu-2">
+              <div>
+                <h3 class="text-xl font-bold text-light mb-1">B.Sc. Computer Science</h3>
+                <p class="text-accent font-semibold">Ariel University</p>
+              </div>
+              <button class="text-primary hover:text-accent transition-colors mt-1 flex-shrink-0 ml-4" aria-label="Toggle details">
+                <svg class="w-6 h-6 timeline-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+              </button>
+            </div>
+            <div id="edu-2" class="timeline-detail overflow-hidden" style="max-height: 0; transition: max-height 0.35s ease;">
+              <p class="text-light/70 mt-3">
+                Comprehensive foundation in computer science principles, algorithms,
+                data structures, and software engineering practices.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -106,47 +131,19 @@ import skills from '../data/skills.json';
           <span class="text-accent text-4xl mr-4">🛠️</span>
           Technical Skills
         </h2>
-        
         <div class="grid md:grid-cols-2 gap-8">
-          <!-- Programming Languages -->
-          <div>
-            <h3 class="text-xl font-semibold text-accent mb-4">Programming Languages</h3>
-            <div class="flex flex-wrap gap-3">
-              {skills.filter(skill => ['Python', 'Java', 'C/C++'].includes(skill)).map(skill => (
-                <span class="px-4 py-2 bg-primary/20 text-primary rounded-full font-semibold code-font">
-                  {skill}
-                </span>
-              ))}
+          {skillsByCategory.map(([category, items], i) => (
+            <div class={i === skillsByCategory.length - 1 && skillsByCategory.length % 2 !== 0 ? 'md:col-span-2' : ''}>
+              <h3 class="text-xl font-semibold text-accent mb-4">{category}</h3>
+              <div class="flex flex-wrap gap-3">
+                {items.map(skill => (
+                  <span class="px-4 py-2 bg-primary/20 text-primary rounded-full font-semibold code-font">
+                    {skill}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
-          
-          <!-- AI/ML Technologies -->
-          <div>
-            <h3 class="text-xl font-semibold text-accent mb-4">AI & Machine Learning</h3>
-            <div class="flex flex-wrap gap-3">
-              {skills.filter(skill => 
-                ['Machine Learning', 'Deep Learning', 'NLP', 'Computer Vision'].includes(skill)
-              ).map(skill => (
-                <span class="px-4 py-2 bg-accent/20 text-accent rounded-full font-semibold code-font">
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </div>
-          
-          <!-- Libraries & Frameworks -->
-          <div class="md:col-span-2">
-            <h3 class="text-xl font-semibold text-accent mb-4">Libraries & Frameworks</h3>
-            <div class="flex flex-wrap gap-3">
-              {skills.filter(skill => 
-                ['Pandas', 'NumPy', 'Scikit-learn'].includes(skill)
-              ).map(skill => (
-                <span class="px-4 py-2 bg-primary/10 border border-primary/30 text-light rounded-full font-semibold code-font">
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
       </div>
 
@@ -156,66 +153,72 @@ import skills from '../data/skills.json';
           <span class="text-accent text-4xl mr-4">💼</span>
           Professional Experience
         </h2>
-        
+
         <div class="space-y-8">
           <div class="border-l-4 border-primary pl-8 relative">
             <div class="absolute -left-2 top-2 w-4 h-4 bg-primary rounded-full"></div>
-            <h3 class="text-xl font-bold text-light mb-2">Research Assistant</h3>
-            <p class="text-accent font-semibold mb-3">Ariel University</p>
-            <ul class="text-light/70 space-y-2">
-              <li class="flex items-start">
-                <span class="text-primary mr-2">•</span>
-                Conducted advanced research in machine learning and artificial intelligence
-              </li>
-              <li class="flex items-start">
-                <span class="text-primary mr-2">•</span>
-                Contributed to academic publications and research papers
-              </li>
-              <li class="flex items-start">
-                <span class="text-primary mr-2">•</span>
-                Explored cutting-edge technologies in data science and AI applications
-              </li>
-            </ul>
+            <div class="flex items-start justify-between cursor-pointer timeline-toggle" data-target="exp-1">
+              <div>
+                <h3 class="text-xl font-bold text-light mb-1">Research Assistant</h3>
+                <p class="text-accent font-semibold">Ariel University</p>
+              </div>
+              <button class="text-primary hover:text-accent transition-colors mt-1 flex-shrink-0 ml-4" aria-label="Toggle details">
+                <svg class="w-6 h-6 timeline-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+              </button>
+            </div>
+            <div id="exp-1" class="timeline-detail overflow-hidden" style="max-height: 0; transition: max-height 0.35s ease;">
+              <ul class="text-light/70 space-y-2 mt-3">
+                <li class="flex items-start"><span class="text-primary mr-2">•</span>Conducted advanced research in machine learning and artificial intelligence</li>
+                <li class="flex items-start"><span class="text-primary mr-2">•</span>Contributed to academic publications and research papers</li>
+                <li class="flex items-start"><span class="text-primary mr-2">•</span>Explored cutting-edge technologies in data science and AI applications</li>
+              </ul>
+            </div>
           </div>
-          
+
           <div class="border-l-4 border-accent pl-8 relative">
             <div class="absolute -left-2 top-2 w-4 h-4 bg-accent rounded-full"></div>
-            <h3 class="text-xl font-bold text-light mb-2">Teaching Assistant</h3>
-            <p class="text-accent font-semibold mb-3">Ariel University</p>
-            <ul class="text-light/70 space-y-2">
-              <li class="flex items-start">
-                <span class="text-accent mr-2">•</span>
-                Mentored students in computer science courses and programming concepts
-              </li>
-              <li class="flex items-start">
-                <span class="text-accent mr-2">•</span>
-                Helped students understand complex algorithms and data structures
-              </li>
-              <li class="flex items-start">
-                <span class="text-accent mr-2">•</span>
-                Facilitated practical coding sessions and problem-solving workshops
-              </li>
-            </ul>
+            <div class="flex items-start justify-between cursor-pointer timeline-toggle" data-target="exp-2">
+              <div>
+                <h3 class="text-xl font-bold text-light mb-1">Teaching Assistant</h3>
+                <p class="text-accent font-semibold">Ariel University</p>
+              </div>
+              <button class="text-primary hover:text-accent transition-colors mt-1 flex-shrink-0 ml-4" aria-label="Toggle details">
+                <svg class="w-6 h-6 timeline-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+              </button>
+            </div>
+            <div id="exp-2" class="timeline-detail overflow-hidden" style="max-height: 0; transition: max-height 0.35s ease;">
+              <ul class="text-light/70 space-y-2 mt-3">
+                <li class="flex items-start"><span class="text-accent mr-2">•</span>Mentored students in computer science courses and programming concepts</li>
+                <li class="flex items-start"><span class="text-accent mr-2">•</span>Helped students understand complex algorithms and data structures</li>
+                <li class="flex items-start"><span class="text-accent mr-2">•</span>Facilitated practical coding sessions and problem-solving workshops</li>
+              </ul>
+            </div>
           </div>
-          
+
           <div class="border-l-4 border-primary pl-8 relative">
             <div class="absolute -left-2 top-2 w-4 h-4 bg-primary rounded-full"></div>
-            <h3 class="text-xl font-bold text-light mb-2">Student Mentor</h3>
-            <p class="text-accent font-semibold mb-3">Academic Environment</p>
-            <ul class="text-light/70 space-y-2">
-              <li class="flex items-start">
-                <span class="text-primary mr-2">•</span>
-                Provided guidance and support to fellow students in AI and ML topics
-              </li>
-              <li class="flex items-start">
-                <span class="text-primary mr-2">•</span>
-                Fostered collaborative learning environments and knowledge sharing
-              </li>
-              <li class="flex items-start">
-                <span class="text-primary mr-2">•</span>
-                Organized study groups and technical discussion sessions
-              </li>
-            </ul>
+            <div class="flex items-start justify-between cursor-pointer timeline-toggle" data-target="exp-3">
+              <div>
+                <h3 class="text-xl font-bold text-light mb-1">Student Mentor</h3>
+                <p class="text-accent font-semibold">Academic Environment</p>
+              </div>
+              <button class="text-primary hover:text-accent transition-colors mt-1 flex-shrink-0 ml-4" aria-label="Toggle details">
+                <svg class="w-6 h-6 timeline-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+              </button>
+            </div>
+            <div id="exp-3" class="timeline-detail overflow-hidden" style="max-height: 0; transition: max-height 0.35s ease;">
+              <ul class="text-light/70 space-y-2 mt-3">
+                <li class="flex items-start"><span class="text-primary mr-2">•</span>Provided guidance and support to fellow students in AI and ML topics</li>
+                <li class="flex items-start"><span class="text-primary mr-2">•</span>Fostered collaborative learning environments and knowledge sharing</li>
+                <li class="flex items-start"><span class="text-primary mr-2">•</span>Organized study groups and technical discussion sessions</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -287,12 +290,30 @@ import skills from '../data/skills.json';
 </Layout>
 
 <script>
+  // Expandable timeline items
+  document.querySelectorAll('.timeline-toggle').forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      const targetId = toggle.getAttribute('data-target');
+      const detail = document.getElementById(targetId);
+      const iconPath = toggle.querySelector('.timeline-icon path');
+      const isOpen = detail.style.maxHeight !== '0px' && detail.style.maxHeight !== '';
+
+      if (isOpen) {
+        detail.style.maxHeight = '0px';
+        iconPath?.setAttribute('d', 'M12 4v16m8-8H4');
+      } else {
+        detail.style.maxHeight = detail.scrollHeight + 'px';
+        iconPath?.setAttribute('d', 'M20 12H4');
+      }
+    });
+  });
+
   // Scroll animations
   const observerOptions = {
     threshold: 0.1,
     rootMargin: '0px 0px -50px 0px'
   };
-  
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -301,8 +322,7 @@ import skills from '../data/skills.json';
       }
     });
   }, observerOptions);
-  
-  // Observe all sections
+
   document.querySelectorAll('.hover-glow').forEach(element => {
     element.style.opacity = '0';
     element.style.transform = 'translateY(30px)';

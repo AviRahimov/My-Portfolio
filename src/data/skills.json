@@ -1,4 +1,5 @@
-[
-  "Python", "Java", "C/C++", "Machine Learning", "Deep Learning",
-  "NLP", "Computer Vision", "Pandas", "NumPy", "Scikit-learn"
-]
+{
+  "Languages": ["Python", "Java", "C/C++"],
+  "ML & AI": ["Machine Learning", "Deep Learning", "NLP", "Computer Vision"],
+  "Libraries": ["Pandas", "NumPy", "Scikit-learn"]
+}
